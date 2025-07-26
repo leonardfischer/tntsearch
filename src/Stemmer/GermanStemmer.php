@@ -59,7 +59,7 @@ class GermanStemmer implements StemmerInterface
         $word = mb_strtolower($word);
         //check for invalid characters
         preg_match("#.#u", $word);
-        if (preg_last_error() !== 0) {
+        if (preg_last_error() !== PREG_NO_ERROR) {
             throw new \InvalidArgumentException("Word '$word' seems to be errornous. Error code from preg_last_error(): " . preg_last_error());
         }
         if (!isset(self::$cache[$word])) {
