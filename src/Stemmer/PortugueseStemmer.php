@@ -419,7 +419,7 @@ class PortugueseStemmer implements StemmerInterface
                 $before = $position - 1;
                 $letter = self::substr($word, $before, 1);
 
-                if ($letter == 'e') {
+                if ($letter === 'e') {
                     $word = preg_replace('#(iras|ira)$#u', 'ir', $word);
                 }
             }
@@ -455,7 +455,7 @@ class PortugueseStemmer implements StemmerInterface
         if (self::searchIfInRv($word, ['i'], $rvIndex) !== false) {
             $letter = self::substr($word, -2, 1);
 
-            if ($letter == 'c') {
+            if ($letter === 'c') {
                 $word = self::substr($word, 0, -1);
             }
 
