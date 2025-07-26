@@ -62,6 +62,11 @@ class RedisEngine implements EngineInterface
         ], $redisOptions);
     }
 
+    /**
+     * @param string $indexName
+     * @return $this
+     * @throws Exception
+     */
     public function createIndex(string $indexName)
     {
         $this->flushIndex($indexName);

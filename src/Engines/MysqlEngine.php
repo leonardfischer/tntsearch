@@ -19,6 +19,11 @@ use TeamTNT\TNTSearch\Tokenizer\Tokenizer;
 
 class MysqlEngine extends SqliteEngine
 {
+    /**
+     * @param string $indexName
+     * @return $this
+     * @throws \Exception
+     */
     public function createIndex(string $indexName)
     {
         $this->setIndexName($indexName);

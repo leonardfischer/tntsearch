@@ -49,8 +49,8 @@ class SqliteEngine implements EngineInterface
 
     /**
      * @param string $indexName
-     *
-     * @return TNTIndexer
+     * @return $this
+     * @throws \Exception
      */
     public function createIndex(string $indexName)
     {
@@ -206,7 +206,7 @@ class SqliteEngine implements EngineInterface
             $row->forget($this->getPrimaryKey());
         }
 
-        $stems = $row->map(function ($columnContent, $columnName) use ($row) {
+        $stems = $row->map(function ($columnContent) {
             if (trim((string)$columnContent) === '') {
                 return [];
             }
@@ -253,7 +253,8 @@ class SqliteEngine implements EngineInterface
     public function saveWordlist(Collection $stems)
     {
         $terms = [];
-        $stems->map(function ($column, $key) use (&$terms) {
+
+        $stems->map(function ($column) use (&$terms) {
             foreach ($column as $term) {
                 if (array_key_exists($term, $terms)) {
                     $terms[$term]['hits']++;
@@ -269,7 +270,6 @@ class SqliteEngine implements EngineInterface
         });
 
         foreach ($terms as $key => $term) {
-
             try {
                 $this->insertWordlistStmt->bindParam(":keyword", $key);
                 $this->insertWordlistStmt->bindParam(":hits", $term['hits']);
@@ -317,13 +317,13 @@ class SqliteEngine implements EngineInterface
         $insert = 'INSERT INTO doclist (term_id, doc_id, hit_count) VALUES (:id, :doc, :hits)';
         $stmt = $this->index->prepare($insert);
 
-        foreach ($terms as $key => $term) {
+        foreach ($terms as $term) {
 
             $stmt->bindValue(':id', $term['id']);
             $stmt->bindValue(':doc', $docId);
             $stmt->bindValue(':hits', $term['hits']);
             try {
-                $res = $stmt->execute();
+                $stmt->execute();
             } catch (\Exception $e) {
                 //we have a duplicate
                 echo $e->getMessage();

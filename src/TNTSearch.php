@@ -399,7 +399,11 @@ class TNTSearch
 
     public function filesystemMapIdsToPaths($docs)
     {
-        return $this->engine->filesystemMapIdsToPaths($docs);
+        if ($this->engine instanceof SqliteEngine) {
+            return $this->engine->filesystemMapIdsToPaths($docs);
+        }
+
+        return $docs;
     }
 
     public function info($str)
