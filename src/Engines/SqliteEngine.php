@@ -333,31 +333,6 @@ class SqliteEngine implements EngineInterface
 
     public function saveHitList(array $stems, int $docId, array $termsList)
     {
-        return;
-        $fieldCounter = 0;
-        $fields = [];
-
-        $insert = "INSERT INTO hitlist (term_id, doc_id, field_id, position, hit_count)
-                   VALUES (:term_id, :doc_id, :field_id, :position, :hit_count)";
-        $stmt = $this->index->prepare($insert);
-
-        foreach ($stems as $field => $terms) {
-            $fields[$fieldCounter] = $field;
-            $positionCounter = 0;
-            $termCounts = array_count_values($terms);
-            foreach ($terms as $term) {
-                if (isset($termsList[$term])) {
-                    $stmt->bindValue(':term_id', $termsList[$term]['id']);
-                    $stmt->bindValue(':doc_id', $docId);
-                    $stmt->bindValue(':field_id', $fieldCounter);
-                    $stmt->bindValue(':position', $positionCounter);
-                    $stmt->bindValue(':hit_count', $termCounts[$term]);
-                    $stmt->execute();
-                }
-                $positionCounter++;
-            }
-            $fieldCounter++;
-        }
     }
 
     public function readDocumentsFromFileSystem()
